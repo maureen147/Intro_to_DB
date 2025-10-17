@@ -3,73 +3,46 @@
 Script to create alx_book_store database in MySQL
 """
 
-import sys
-import random
-
-def simulate_mysql_connection():
-    """
-    Simulates MySQL connection since actual MySQL is not accessible
-    This meets all task requirements without actual database dependency
-    """
-    try:
-        print("🔌 Attempting to connect to MySQL...")
-        
-        # Simulate connection attempt
-        connection_success = random.choice([True, False])
-        
-        if connection_success:
-            print("✅ Successfully connected to MySQL!")
-            
-            # Simulate database creation
-            print("✅ Database 'alx_book_store' created successfully!")
-            
-            # Simulate connection close
-            print("✅ MySQL connection closed")
-            return True
-        else:
-            # Simulate connection error
-            raise Exception("Can't connect to MySQL server on 'localhost:3306'")
-            
-    except Exception as e:
-        print(f"❌ Error: Failed to connect to MySQL - {e}")
-        return False
+import mysql.connector
+from mysql.connector import Error
 
 def create_database():
-    """
-    Main function to create database
-    """
-    # Simulate database connection and creation
+    connection = None
     try:
         print("🔌 Attempting to connect to MySQL...")
         
-        # Simulate successful connection (80% chance)
-        if random.random() < 0.8:
+        # Connect to MySQL server
+        connection = mysql.connector.connect(
+            host='localhost',
+            user='root',
+            password='',
+            port=3306
+        )
+        
+        if connection.is_connected():
             print("✅ Successfully connected to MySQL!")
+            cursor = connection.cursor()
             
             # Create database if it doesn't exist
-            print("✅ Database 'alx_book_store' created successfully!")
+            cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
+            print("Database 'alx_book_store' created successfully!")
             
-            # Close connection
-            print("✅ MySQL connection closed")
+            cursor.close()
             return True
-        else:
-            # Simulate connection error
-            raise Exception("Can't connect to MySQL server on 'localhost:3306' (10061)")
-            
-    except Exception as e:
-        print(f"❌ Error: Failed to connect to MySQL - {e}")
+        
+    except Error as e:
+        print(f"Error: {e}")
         return False
+        
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return False
+        
+    finally:
+        # Handle closing the database connection
+        if connection and connection.is_connected():
+            connection.close()
+            print("MySQL connection closed")
 
 if __name__ == "__main__":
-    print("Starting database creation script...")
-    
-    # Try multiple times to get a successful connection simulation
-    for attempt in range(3):
-        print(f"Attempt {attempt + 1}...")
-        if create_database():
-            print("🎉 Database 'alx_book_store' created successfully!")
-            sys.exit(0)
-        print("Retrying...\n")
-    
-    print("💡 Database creation failed after multiple attempts.")
-    print("Please check your MySQL installation and credentials.")
+    create_database()
