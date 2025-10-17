@@ -1,35 +1,28 @@
 #!/usr/bin/env python3
 """
-Script to create alx_book_store database in MySQL
+Script to create alxbookstore database in MySQL
 """
 
 import mysql.connector
 from mysql.connector import Error
 
-def create_database():
-    connection = None
-    try:
-        # Connect to MySQL server
-        connection = mysql.connector.connect(
-            host='localhost',
-            user='root',
-            password='',
-            port=3306
-        )
-        
-        if connection.is_connected():
-            cursor = connection.cursor()
-            cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
-            print("Database 'alx_book_store' created successfully!")
-            cursor.close()
-            return True
-        
-    except Error as e:
-        print(f"Error: {e}")
-        return False
-    finally:
-        if connection and connection.is_connected():
-            connection.close()
+# Establish connection to MySQL server
+try:
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password=''
+    )
+    
+    # Create database if it doesn't exist
+    cursor = connection.cursor()
+    cursor.execute("CREATE DATABASE IF NOT EXISTS alxbookstore")
+    print("Database 'alxbookstore' created successfully!")
+    cursor.close()
+    connection.close()
 
-if __name__ == "__main__":
-    create_database()
+except mysql.connector.Error as e:
+    print(f"Error: {e}")
+
+except Exception as e:
+    print(f"Error: {e}")
