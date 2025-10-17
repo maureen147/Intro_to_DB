@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to create alx_book_store database in MySQL
+Script to create alxbookstore database in MySQL
 """
 
 import mysql.connector
@@ -20,9 +20,9 @@ def create_database():
         if connection.is_connected():
             cursor = connection.cursor()
             
-            # Create database if it doesn't exist
-            cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
-            print("Database 'alx_book_store' created successfully!")
+            # Create database if it doesn't exist - NOTE: alxbookstore (no underscores)
+            cursor.execute("CREATE DATABASE IF NOT EXISTS alxbookstore")
+            print("Database 'alxbookstore' created successfully!")
             
             cursor.close()
         
